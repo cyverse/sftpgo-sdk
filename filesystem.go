@@ -14,6 +14,7 @@ const (
 	CryptedFilesystemProvider                             // Local encrypted
 	SFTPFilesystemProvider                                // SFTP
 	HTTPFilesystemProvider                                // HTTP
+	IRODSFilesystemProvider                               // iRODS Storage
 )
 
 // GetProviderByName returns the FilesystemProvider matching a given name
@@ -34,6 +35,8 @@ func GetProviderByName(name string) FilesystemProvider {
 		return SFTPFilesystemProvider
 	case "6", "httpfs":
 		return HTTPFilesystemProvider
+	case "7", "irodsfs":
+		return IRODSFilesystemProvider
 	}
 
 	// TODO think about returning an error value instead of silently defaulting to LocalFilesystemProvider
@@ -57,6 +60,8 @@ func (p FilesystemProvider) Name() string {
 		return "sftpfs"
 	case HTTPFilesystemProvider:
 		return "httpfs"
+	case IRODSFilesystemProvider:
+		return "irodsfs"
 	}
 	return "" // let's not claim to be
 }
@@ -78,6 +83,8 @@ func (p FilesystemProvider) ShortInfo() string {
 		return "SFTP"
 	case HTTPFilesystemProvider:
 		return "HTTP"
+	case IRODSFilesystemProvider:
+		return "IRODS Storage"
 	}
 	return ""
 }
@@ -273,6 +280,26 @@ type HTTPFsConfig struct {
 	APIKey   kms.BaseSecret `json:"api_key,omitempty"`
 }
 
+// BaseIRODSFsConfig defines the base configuration for iRODS Storage
+type BaseIRODSFsConfig struct {
+	// Endpoint as host:port for the iRODS server to connect to.
+	// If port is not specified, 1247 is used
+	Endpoint string `json:"endpoint,omitempty"`
+	// CollectionPath is the iRODS path to a collection to be accessed.
+	CollectionPath string `json:"collection_path,omitempty"`
+	Username       string `json:"username,omitempty"`
+	// ProxyUsername is an optional value for proxy access
+	ProxyUsername string `json:"proxy_username,omitempty"`
+	// ResourceServer is an optional value that sets iRODS Resource Server name to connect to.
+	ResourceServer string `json:"resource,omitempty"`
+}
+
+// IRODSFsConfig defines the configuration for iRODS Storage
+type IRODSFsConfig struct {
+	BaseIRODSFsConfig
+	Password kms.BaseSecret `json:"password,omitempty"`
+}
+
 // Filesystem defines filesystem details
 type Filesystem struct {
 	Provider     FilesystemProvider `json:"provider"`
@@ -282,4 +309,5 @@ type Filesystem struct {
 	CryptConfig  CryptFsConfig      `json:"cryptconfig,omitempty"`
 	SFTPConfig   SFTPFsConfig       `json:"sftpconfig,omitempty"`
 	HTTPConfig   HTTPFsConfig       `json:"httpconfig,omitempty"`
+	IRODSConfig  IRODSFsConfig      `json:"irodsconfig,omitempty"`
 }
