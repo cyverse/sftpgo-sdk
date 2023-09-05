@@ -283,15 +283,35 @@ type HTTPFsConfig struct {
 // BaseIRODSFsConfig defines the base configuration for iRODS Storage
 type BaseIRODSFsConfig struct {
 	// Endpoint as host:port for the iRODS server to connect to.
-	// If port is not specified, 1247 is used
+	// If port is not specified, 1247 is used.
 	Endpoint string `json:"endpoint,omitempty"`
 	// CollectionPath is the iRODS path to a collection to be accessed.
 	CollectionPath string `json:"collection_path,omitempty"`
 	Username       string `json:"username,omitempty"`
-	// ProxyUsername is an optional value for proxy access
+	// ProxyUsername is an optional value for proxy access.
 	ProxyUsername string `json:"proxy_username,omitempty"`
 	// ResourceServer is an optional value that sets iRODS Resource Server name to connect to.
 	ResourceServer string `json:"resource,omitempty"`
+	// AuthScheme is an optional value that sets authentication scheme.
+	// Select one of ['native', 'pam'].
+	// If scheme is not specified, 'native' is used.
+	AuthScheme string `json:"auth_scheme,omitempty"`
+	// SSLCACertificatePath is an optional path for SSL CA Cert.
+	// Required to use PAM auth
+	// e.g., "/etc/ssl/certs/ca-certificates.crt".
+	SSLCACertificatePath string `json:"ssl_ca_cert_path,omitempty"`
+	// SSLKeySize is an optional encryption key size for SSL.
+	// Required to use PAM auth.
+	SSLKeySize int `json:"ssl_key_size,omitempty"`
+	// SSLAlgorithm is an optional encryption algorithm for SSL.
+	// Required to use PAM auth.
+	SSLAlgorithm string `json:"ssl_algorithm,omitempty"`
+	// SSLSaltSize is an optional encryption salt size for SSL.
+	// Required to use PAM auth.
+	SSLSaltSize int `json:"ssl_salt_size,omitempty"`
+	// SSLHashRounds is an optional encryption hash rounds for SSL.
+	// Required to use PAM auth.
+	SSLHashRounds int `json:"ssl_hash_rounds,omitempty"`
 }
 
 // IRODSFsConfig defines the configuration for iRODS Storage
