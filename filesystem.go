@@ -296,6 +296,11 @@ type BaseIRODSFsConfig struct {
 	// Select one of ['native', 'pam'].
 	// If scheme is not specified, 'native' is used.
 	AuthScheme string `json:"auth_scheme,omitempty"`
+	// RequireClientServerNegotiation determines if server-client negotiation is required when establishing a new connection
+	RequireClientServerNegotiation bool `json:"require_cs_negotiation,omitempty"`
+	// ClientServerNegotiationPolicy sets policy to be used in the client when establishing a new connection
+	// Select one of ['CS_NEG_REFUSE','CS_NEG_REQUIRE','CS_NEG_DONT_CARE']
+	ClientServerNegotiationPolicy string `json:"cs_negotiation_policy,omitempty"`
 	// SSLCACertificatePath is an optional path for SSL CA Cert.
 	// Required to use PAM auth
 	// e.g., "/etc/ssl/certs/ca-certificates.crt".
